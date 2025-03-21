@@ -1,13 +1,35 @@
 // src/App.jsx
 
+import { useState } from 'react';
+import * as weatherService from './services/weatherService.js';
+import WeatherSearch from './components/WeatherSearch/WeatherSearch';
+
+const [weather, setWeather] = useState({});
+
+
+
 const App = () => {
 
-  return (
-    <h1>Hello world!</h1>
-  );
-}
+  const fetchData = async () => {
+    const data = await weatherService.show(city);
+    const newWeatherState = {
+      location: data.location.name,
+      temperature: data.current.temp_f,
+      condition: data.current.condition.text,
+    };
+    setWeather(newWeatherState);    
+  };
+  console.log('State: ', weather);
 
-export default App
+  return (
+    <main>
+      <h1>Weather API</h1>
+      <WeatherSearch fetchData={fetchData} />
+      </main>
+  );
+};
+
+export default App;
 
 
 // import { useState } from 'react'
