@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as weatherService from './services/weatherService.js';
 import WeatherSearch from './components/WeatherSearch/WeatherSearch.jsx';
 import WeatherDetails from './components/WeatherDetails/WeatherDetails.jsx';
@@ -12,7 +12,7 @@ const App = () => {
 
   const fetchData = async (city) => {
     const data = await weatherService.show(city);
-    console.log('Data:', data);
+    // console.log('Data:', data);
 
     const newWeatherState = {
       location: data.location.name,
@@ -21,6 +21,24 @@ const App = () => {
     };
     setWeather(newWeatherState);
   };
+
+  useEffect(() => {
+
+    // define a fetch function
+    const fetchDefaultData = async () => {
+      const data = await weatherService.show('77449');
+      const newWeatherState = {
+        location: data.location.name,
+        temperature: data.current.temp_f,
+        condition: data.current.condition.text,
+      };
+      setWeather(newWeatherState);
+    };
+
+    // call the fetch function when the page loads
+    fetchDefaultData();
+
+  }, []);
 
   return (
     <main>
